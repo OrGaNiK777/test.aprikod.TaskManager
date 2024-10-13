@@ -23,4 +23,27 @@ export class TaskModel {
 	addSubTask(subTask: TaskModel) {
 		this.subTasks.push(subTask)
 	}
+
+	editTaskTitle(newTitle: string) {
+		this.title = newTitle
+	}
+
+	editTaskText(newText: string) {
+		this.text = newText
+	}
+
+	findParentTask = (taskList: TaskModel[], subTask: TaskModel): TaskModel | null => {
+		for (const task of taskList) {
+			if (task.subTasks.includes(subTask)) {
+				return task
+			}
+
+			const parent = this.findParentTask(task.subTasks, subTask)
+			if (parent) {
+				return parent
+			}
+		}
+
+		return null
+	}
 }

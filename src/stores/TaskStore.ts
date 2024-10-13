@@ -18,7 +18,20 @@ export class TaskStore {
 	addSubTask(parentTask: TaskModel, title: string, text: string) {
 		const newSubTask = new TaskModel(title, text)
 		parentTask.addSubTask(newSubTask)
-		this.saveToLocalStorage() 
+		this.saveToLocalStorage()
+	}
+
+	deleteTask(taskToDelete: TaskModel) {
+		this.tasks = this.tasks.filter((task) => task !== taskToDelete)
+		this.saveToLocalStorage()
+	}
+
+	deleteSubTask(parentTask: TaskModel, subTaskToDelete: TaskModel) {
+		parentTask.subTasks = parentTask.subTasks.filter((subTask) => subTask !== subTaskToDelete)
+		parentTask.subTasks.forEach((subTask) => {
+			this.deleteSubTask(subTask, subTaskToDelete)
+		})
+		this.saveToLocalStorage()
 	}
 
 	saveToLocalStorage() {
