@@ -46,4 +46,13 @@ export class TaskModel {
 
 		return null
 	}
+
+	toggleCompletion(e: boolean) {
+		this.setCompleted(e) 
+		this.subTasks.forEach((subTask) => subTask.toggleCompletion(this.isCompleted))
+	}
+
+	setCompleted(isCompleted: boolean) {
+		this.isCompleted = isCompleted 
+	}
 }
