@@ -17,14 +17,13 @@ const Task: React.FC<TaskProps> = observer(({ task, onSelect }) => {
 		<div style={{ marginLeft: '20px', padding: '10px', borderRadius: '5px', backgroundColor: '#f9f9f9'}}>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<span onClick={toggleExpanded} style={{ cursor: 'pointer', marginRight: '8px', fontSize: '20px' }}>
-					{isExpanded ? '▼' : '►'}
+					{isExpanded ? '▲' : '►'}
 				</span>
 				<input type='checkbox' />
 				<span
 					style={{
 						cursor: 'pointer',
 						marginLeft: '8px',
-						flexGrow: 1,
 					}}
 					onClick={() => {
 						onSelect(task)
