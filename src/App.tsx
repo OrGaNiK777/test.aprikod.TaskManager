@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TaskStore } from './stores/TaskStore'
 import TaskList from './components/TaskList'
@@ -6,11 +6,10 @@ import TaskDetail from './components/TaskDetail'
 import { TaskModel } from './models/TaskModel'
 import Modal from './components/Modal'
 import ThemeToggle from './components/ThemeToggle'
-import { ThemeStore } from './stores/ThemeStore'
+import { themeStore } from './stores/ThemeStore'
 import './App.css'
 
 const taskStore = new TaskStore()
-const themeStore = new ThemeStore()
 
 const App: React.FC = observer(() => {
 	const [selectedTask, setSelectedTask] = useState<null | TaskModel>(null)

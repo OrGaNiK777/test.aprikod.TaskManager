@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 
 type Theme = 'light' | 'dark' | 'auto'
 
-export class ThemeStore {
+class ThemeStore {
 	theme: Theme = 'auto'
 
 	constructor() {
@@ -24,3 +24,5 @@ export class ThemeStore {
 		return this.theme === 'dark' ? 'dark' : this.theme === 'light' ? 'light' : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 	}
 }
+
+export const themeStore = new ThemeStore()

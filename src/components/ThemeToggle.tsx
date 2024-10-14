@@ -1,7 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { ThemeStore } from '../stores/ThemeStore'
-
-const themeStore = new ThemeStore()
+import { themeStore } from '../stores/ThemeStore'
 
 const ThemeToggle: React.FC = observer(() => {
 	return (

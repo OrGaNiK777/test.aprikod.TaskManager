@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ThemeStore } from '../stores/ThemeStore'
-
-const themeStore = new ThemeStore()
+import { themeStore } from '../stores/ThemeStore'
 
 interface TaskModalProps {
 	onClose: () => void
