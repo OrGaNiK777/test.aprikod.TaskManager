@@ -11,7 +11,7 @@
 
 2. **Клонирование репозитория:**
 
-bash git clone git@github.com:OrGaNiK777/test.aprikod.TaskManager.git
+bash git clone `git@github.com:OrGaNiK777/test.aprikod.TaskManager.git`
 
 3. **Установка зависимостей:**
 
