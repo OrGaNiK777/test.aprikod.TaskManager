@@ -35,6 +35,7 @@ export class TaskStore {
 	}
 
 	saveToLocalStorage() {
+		console.log(this.tasks)
 		localStorage.setItem('tasks', JSON.stringify(this.tasks))
 	}
 

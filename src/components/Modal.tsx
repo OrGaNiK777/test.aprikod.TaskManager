@@ -1,12 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ThemeStore } from '../stores/ThemeStore'
 
-interface ModalProps {
-	children: React.ReactNode
+const themeStore = new ThemeStore()
+
+interface TaskModalProps {
 	onClose: () => void
+	title: string
+	taskTitle: string
+	setTaskTitle: (title: string) => void
+	taskText: string
+	setTaskText: (text: string) => void
+	handleSubmit: () => void
+	buttonText: string
 }
 
-const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
+const Modal: React.FC<TaskModalProps> = ({ onClose, title, taskTitle, setTaskTitle, taskText, setTaskText, handleSubmit, buttonText }) => {
 	return ReactDOM.createPortal(
 		<div
 			style={{
@@ -22,17 +31,48 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
 			}}
 		>
 			<div
+				className={themeStore.inputClassName}
 				style={{
-					backgroundColor: '#fff',
+					position: 'relative',
 					padding: '20px',
 					borderRadius: '5px',
+					border: '1px solid #B5B5B5',
 					boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
 				}}
 			>
-				<button onClick={onClose} style={{ float: 'right', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
+				<button
+					onClick={onClose}
+					style={{
+						position: 'absolute',
+						top: '10px',
+						right: '10px',
+						background: 'none',
+						border: 'none',
+						cursor: 'pointer',
+						fontSize: '16px',
+					}}
+				>
 					✖️
 				</button>
-				{children}
+				<div style={{ minWidth: '500px', display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
+					<h2 style={{ fontSize: '1.5em', marginTop: '0' }}>{title}</h2>
+					<input className={themeStore.inputClassName} type='text' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder='Заголовок задачи' maxLength={25} style={{ padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
+					<textarea className={themeStore.inputClassName} value={taskText} onChange={(e) => setTaskText(e.target.value)} placeholder='Текст задачи' maxLength={1000} style={{ minWidth: '500px', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
+					<button
+						onClick={handleSubmit}
+						style={{
+							padding: '10px 20px',
+							backgroundColor: '#28a745',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '5px',
+							cursor: 'pointer',
+							fontSize: '1em',
+						}}
+					>
+						{buttonText}
+					</button>
+				</div>
 			</div>
 		</div>,
 		document.body

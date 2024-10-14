@@ -6,7 +6,7 @@ interface TaskProps {
 	task: TaskModel
 	subTask: TaskModel
 	onSelect: (task: TaskModel) => void
-	handleSubTaskCheckboxChange: (task: TaskModel, subTask: TaskModel, e: any) => void
+	handleSubTaskCheckboxChange: (task: TaskModel, subTask: TaskModel, e: boolean) => void
 }
 
 const SubTask: React.FC<TaskProps> = observer(({ task, subTask, onSelect, handleSubTaskCheckboxChange }) => {
@@ -15,19 +15,14 @@ const SubTask: React.FC<TaskProps> = observer(({ task, subTask, onSelect, handle
 	const toggleExpanded = () => setIsExpanded(!isExpanded)
 
 	return (
-		<div style={{ marginLeft: '20px', padding: '5px', borderRadius: '5px', backgroundColor: '#f9f9f9' }}>
+		<div style={{ marginLeft: '20px', padding: '5px', borderRadius: '5px'}}>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<span onClick={toggleExpanded} style={{ cursor: 'pointer', marginRight: '8px', fontSize: '20px' }}>
-					{isExpanded ? '▼' : '►'}
+					{isExpanded ? '▲' : '►'}
 				</span>
 				<input type='checkbox' checked={subTask.isCompleted} onChange={(e) => handleSubTaskCheckboxChange(task, subTask, e.target.checked)} />
 				<span
-					style={{
-						textDecoration: subTask.isCompleted ? 'line-through' : 'none',
-						cursor: 'pointer',
-						marginLeft: '8px',
-						flexGrow: 1,
-					}}
+					style={{ cursor: 'pointer', marginLeft: '8px' }}
 					onClick={() => {
 						onSelect(subTask)
 					}}

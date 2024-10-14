@@ -10,7 +10,7 @@ export class TaskModel {
 	subTasks: TaskModel[]
 	createdAt: Date
 
-	constructor(title: string, text: string, isCompleted: boolean = false) {
+	constructor(title: string, text: string, isCompleted: boolean=false) {
 		this.id = generateId()
 		this.title = title
 		this.text = text
@@ -47,9 +47,9 @@ export class TaskModel {
 		return null
 	}
 
-	toggleCompletion(e: boolean) {
-		this.setCompleted(e) 
-		this.subTasks.forEach((subTask) => subTask.toggleCompletion(this.isCompleted))
+	cocked(e: boolean) {
+		this.isCompleted = e 
+		this.subTasks.forEach((subTask) => subTask.cocked(this.isCompleted))
 	}
 
 	setCompleted(isCompleted: boolean) {

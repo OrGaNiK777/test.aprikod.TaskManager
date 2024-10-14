@@ -1,5 +1,16 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+input,
+textarea {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	outline: none;
+}
+
+.dark {
+	background-color: #333;
+	color: #fff;
+}
+
+.light {
+	background-color: #fff;
+	color: #000;
 }

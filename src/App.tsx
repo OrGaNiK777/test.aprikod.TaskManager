@@ -5,9 +5,12 @@ import TaskList from './components/TaskList'
 import TaskDetail from './components/TaskDetail'
 import { TaskModel } from './models/TaskModel'
 import Modal from './components/Modal'
+import ThemeToggle from './components/ThemeToggle'
+import { ThemeStore } from './stores/ThemeStore'
 import './App.css'
 
 const taskStore = new TaskStore()
+const themeStore = new ThemeStore()
 
 const App: React.FC = observer(() => {
 	const [selectedTask, setSelectedTask] = useState<null | TaskModel>(null)
@@ -17,6 +20,7 @@ const App: React.FC = observer(() => {
 	const [taskTitle, setTaskTitle] = useState('')
 	const [taskText, setTaskText] = useState('')
 	const [searchQuery, setSearchQuery] = useState('')
+
 
 	const handleSelectTask = (task: TaskModel) => {
 		setSelectedTask(task)
@@ -37,7 +41,6 @@ const App: React.FC = observer(() => {
 		setIsEditModalOpen(false)
 		setTaskTitle('')
 		setTaskText('')
-		setSelectedTask(null)
 	}
 
 	const handleAddTask = () => {
@@ -98,23 +101,23 @@ const App: React.FC = observer(() => {
 	}
 
 	return (
-		<div style={{ display: 'flex', padding: '20px', backgroundColor: '#f4f6f8', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
+		<div className={themeStore.inputClassName} style={{ display: 'flex', padding: '20px', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
 			<div style={{ flex: 1, marginRight: '20px' }}>
-				<h1 style={{ color: '#333', fontSize: '2em' }}>Task Manager</h1>
+				<ThemeToggle />
+				<h1 style={{ fontSize: '2em' }}>Task Manager</h1>
 				<div style={{ position: 'relative', marginBottom: '10px' }}>
-					<input type='text' placeholder='Поиск по заголовку...' value={searchQuery} onChange={handleSearchChange} style={{ padding: '10px', width: '100%', borderRadius: '5px', border: '1px solid #ccc', fontSize: '1em' }} />
+					<input className={themeStore.inputClassName} type='text' placeholder='Поиск по заголовку...' value={searchQuery} onChange={handleSearchChange} style={{ padding: '10px', width: '100%', borderRadius: '5px', fontSize: '1em' }} />
 					{searchQuery && (
 						<button
 							onClick={clearSearch}
 							style={{
 								position: 'absolute',
-								right: '10px',
+								right: '-15px',
 								top: '50%',
 								transform: 'translateY(-50%)',
 								background: 'none',
 								border: 'none',
 								cursor: 'pointer',
-								color: '#007bff',
 								fontSize: '1.2em',
 							}}
 						>
@@ -122,12 +125,12 @@ const App: React.FC = observer(() => {
 						</button>
 					)}
 				</div>
-				<button onClick={() => setIsTaskModalOpen(true)} style={{ padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1em' }}>
+				<button onClick={() => setIsTaskModalOpen(true)} style={{ color: 'white', padding: '10px 20px', backgroundColor: '#007bff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1em' }}>
 					Добавить задачу
 				</button>
-				<TaskList tasks={taskStore.tasks.filter((task) => task.title.toLowerCase().includes(searchQuery.toLowerCase()))} onSelect={handleSelectTask} />
+				<TaskList tasks={taskStore.tasks.filter((task) => task.title.toLowerCase().includes(searchQuery.toLowerCase()))} onSelect={handleSelectTask} taskStore={taskStore} />
 			</div>
-			<div style={{ width: '750px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px', backgroundColor: '#fff' }}>
+			<div style={{ width: '750px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px', marginLeft: '15px' }}>
 				{selectedTask ? (
 					<div style={{ display: 'flex', flexDirection: 'column' }}>
 						<TaskDetail task={selectedTask} />
@@ -143,7 +146,7 @@ const App: React.FC = observer(() => {
 							<button onClick={() => handleEditTask(selectedTask)} style={{ width: '150px', marginTop: '10px', padding: '5px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
 								Редактировать
 							</button>
-							<button onClick={handleDeleteTask} style={{ marginTop: '10px', padding: '5px', backgroundColor: '#f44336', border: 'none', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
+							<button onClick={handleDeleteTask} style={{ width: '150px', marginTop: '10px', padding: '5px', backgroundColor: '#f44336', border: 'none', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
 								Удалить задачу
 							</button>
 						</div>
@@ -152,42 +155,9 @@ const App: React.FC = observer(() => {
 					<p>Выберите задачу для просмотра деталей.</p>
 				)}
 			</div>
-			{isTaskModalOpen && (
-				<Modal onClose={closeTaskModal}>
-					<div style={{ minWidth: '500px', display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
-						<h2 style={{ fontSize: '1.5em' }}>Добавить новую задачу</h2>
-						<input type='text' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder='Заголовок задачи' maxLength={25} style={{ width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<textarea value={taskText} onChange={(e) => setTaskText(e.target.value)} placeholder='Текст задачи' maxLength={1000} style={{ minWidth: '500px', width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<button onClick={handleAddTask} style={{ padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1em' }}>
-							Создать задачу
-						</button>
-					</div>
-				</Modal>
-			)}
-			{isSubTaskModalOpen && selectedTask && (
-				<Modal onClose={closeSubTaskModal}>
-					<div style={{ minWidth: '500px', display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
-						<h2 style={{ fontSize: '1.5em' }}>Добавить подзадачу к "{selectedTask.title}"</h2>
-						<input type='text' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder='Заголовок подзадачи' maxLength={25} style={{ width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<textarea value={taskText} onChange={(e) => setTaskText(e.target.value)} placeholder='Текст подзадачи' maxLength={1000} style={{ minWidth: '500px', width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<button onClick={() => handleAddSubTask(selectedTask)} style={{ padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1em' }}>
-							Создать подзадачу
-						</button>
-					</div>
-				</Modal>
-			)}
-			{isEditModalOpen && selectedTask && (
-				<Modal onClose={closeEditModal}>
-					<div style={{ minWidth: '500px', display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
-						<h2 style={{ fontSize: '1.5em' }}>Редактировать "{selectedTask.title}"</h2>
-						<input type='text' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder='Заголовок' maxLength={25} style={{ width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<textarea value={taskText} onChange={(e) => setTaskText(e.target.value)} placeholder='Текст' maxLength={1000} style={{ minWidth: '500px', width: '100%', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
-						<button onClick={handleSaveEditTask} style={{ padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1em' }}>
-							Сохранить изменения
-						</button>
-					</div>
-				</Modal>
-			)}
+			{isTaskModalOpen && <Modal onClose={closeTaskModal} title='Добавить новую задачу' taskTitle={taskTitle} setTaskTitle={setTaskTitle} taskText={taskText} setTaskText={setTaskText} handleSubmit={handleAddTask} buttonText='Создать задачу' />}
+			{isSubTaskModalOpen && selectedTask && <Modal onClose={closeSubTaskModal} title={`Добавить подзадачу к "${selectedTask.title}"`} taskTitle={taskTitle} setTaskTitle={setTaskTitle} taskText={taskText} setTaskText={setTaskText} handleSubmit={() => handleAddSubTask(selectedTask)} buttonText='Создать подзадачу' />}
+			{isEditModalOpen && selectedTask && <Modal onClose={closeEditModal} title={`Редактировать "${selectedTask.title}"`} taskTitle={taskTitle} setTaskTitle={setTaskTitle} taskText={taskText} setTaskText={setTaskText} handleSubmit={handleSaveEditTask} buttonText='Сохранить изменения' />}
 		</div>
 	)
 })
