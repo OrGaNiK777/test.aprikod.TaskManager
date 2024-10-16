@@ -1,20 +1,24 @@
+// Modal.js - компонент модального окна
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { themeStore } from '../stores/ThemeStore'
+import ReactDOM from 'react-dom' // Для рендеринга модального окна вне стандартной иерархии
+import { themeStore } from '../stores/ThemeStore' // Импорт хранилища тем
 
+// Интерфейс для props компонента
 interface TaskModalProps {
-	onClose: () => void
-	title: string
-	taskTitle: string
-	setTaskTitle: (title: string) => void
-	taskText: string
-	setTaskText: (text: string) => void
-	handleSubmit: () => void
-	buttonText: string
+	onClose: () => void // Функция закрытия модального окна
+	title: string // Заголовок модального окна
+	taskTitle: string // Заголовок задачи
+	setTaskTitle: (title: string) => void // Функция для изменения заголовка задачи
+	taskText: string // Текст задачи
+	setTaskText: (text: string) => void // Функция для изменения текста задачи
+	handleSubmit: () => void // Функция отправки формы
+	buttonText: string // Текст кнопки отправки
 }
 
 const Modal: React.FC<TaskModalProps> = ({ onClose, title, taskTitle, setTaskTitle, taskText, setTaskText, handleSubmit, buttonText }) => {
+	// Функциональный компонент
 	return ReactDOM.createPortal(
+		// Рендеринг модального окна вне стандартной иерархии DOM
 		<div
 			style={{
 				position: 'fixed',
@@ -38,6 +42,7 @@ const Modal: React.FC<TaskModalProps> = ({ onClose, title, taskTitle, setTaskTit
 					boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
 				}}
 			>
+				{/* Кнопка закрытия */}
 				<button
 					onClick={onClose}
 					style={{
@@ -52,10 +57,13 @@ const Modal: React.FC<TaskModalProps> = ({ onClose, title, taskTitle, setTaskTit
 				>
 					✖️
 				</button>
+				{/* Содержимое модального окна */}
 				<div style={{ minWidth: '500px', display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
 					<h2 style={{ fontSize: '1.5em', marginTop: '0' }}>{title}</h2>
+					{/* Поля ввода */}
 					<input className={themeStore.inputClassName} type='text' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder='Заголовок задачи' maxLength={25} style={{ padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
 					<textarea className={themeStore.inputClassName} value={taskText} onChange={(e) => setTaskText(e.target.value)} placeholder='Текст задачи' maxLength={1000} style={{ minWidth: '500px', padding: '10px', marginBottom: '10px', fontSize: '1em' }} />
+					{/* Кнопка отправки */}
 					<button
 						onClick={handleSubmit}
 						style={{
@@ -73,7 +81,7 @@ const Modal: React.FC<TaskModalProps> = ({ onClose, title, taskTitle, setTaskTit
 				</div>
 			</div>
 		</div>,
-		document.body
+		document.body // Рендеринг в body
 	)
 }
 
